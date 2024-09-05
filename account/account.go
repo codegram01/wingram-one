@@ -26,11 +26,6 @@ type AccountInfo struct {
 	ProfileId int    `json:"profile_id"`
 }
 
-type Auth struct {
-	Access_token  string `json:"access_token"`
-	Refresh_token string `json:"refresh_token"`
-}
-
 type Resource struct {
 	database.Db
 }

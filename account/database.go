@@ -1,6 +1,8 @@
 package account
 
-import "database/sql"
+import (
+	"database/sql"
+)
 
 func (rs *Resource) DbCreate(accReq *AccountReq) (*Account, error) {
 	var acc Account
@@ -46,7 +48,7 @@ func (rs *Resource) DbDetailAuth(email string) (*AccountAuth, error) {
 	return &acc, err
 }
 
-func (rs *Resource) DbInfoDetail(id string) (*AccountInfo, error) {
+func (rs *Resource) DbInfoDetail(id int) (*AccountInfo, error) {
 	var acc AccountInfo
 
 	queryStr := `
@@ -98,4 +100,18 @@ func (rs *Resource) DbInfoList() ([]*AccountInfo, error) {
 	})
 
 	return accounts, err
+}
+
+func (rs *Resource) GetAccountByToken(idToken int) (int, error) {
+	var idAccount int
+	row := rs.Db.QueryRow(`
+		SELECT account_id
+		FROM token
+		WHERE id = $1`, idToken)
+
+	err := row.Scan(
+		&idAccount,
+	)
+
+	return idAccount, err
 }

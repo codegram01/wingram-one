@@ -24,9 +24,18 @@ func (rs *Resource) Routes() chi.Router {
 	r.Post("/register", rs.RegisterHandler)
 	r.Post("/login", rs.LoginHandler)
 
+	r.Group(func(r chi.Router) {
+        r.Use(rs.AuthMiddleware)
+
+		// get my info by token 
+        r.Get("/info", rs.InfoHandler)
+    })
+
 	r.Route("/{id}", func(r chi.Router) {
 		r.Get("/", rs.DetailHandler)
 	})
+
+	
 
 	return r
 }
@@ -92,9 +101,14 @@ func (rs *Resource) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rs *Resource) DetailHandler(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "id")
+	idS := chi.URLParam(r, "id")
+	id, err := strconv.ParseInt(idS, 10, 64)
+	if err != nil {
+		route.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
 
-	acc, err := rs.DbInfoDetail(id)
+	acc, err := rs.DbInfoDetail(int(id))
 	if err != nil {
 		if err == sql.ErrNoRows {
 			route.WriteError(w, http.StatusNotFound, errors.New(key.ErrNotFound))
@@ -176,6 +190,18 @@ func (rs *Resource) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// func (rs *Resource) DeleteHandler(w http.ResponseWriter, r *http.Request) {
-// 	w.Write([]byte("account delete"))
-// }
+func (rs *Resource) InfoHandler(w http.ResponseWriter, r *http.Request) {
+	identity := r.Context().Value(key.CtxIdentity).(*Identity)
+	
+	acc, err := rs.DbInfoDetail(identity.Account_id)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			route.WriteError(w, http.StatusNotFound, errors.New(key.ErrNotFound))
+			return
+		}
+		route.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	route.WriteJson(w, acc)
+}

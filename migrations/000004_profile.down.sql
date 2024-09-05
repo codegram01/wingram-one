@@ -1,0 +1,6 @@
+
+BEGIN;
+
+DROP TABLE IF EXISTS profile;
+
+END;

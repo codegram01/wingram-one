@@ -6,9 +6,10 @@ import (
 )
 
 type ResJson struct {
-	Status string `json:"status"`
-	Data   any    `json:"data"`
-	Error  string `json:"error"`
+	Status  string `json:"status"`
+	Data    any    `json:"data"`
+	Message string `json:"message"`
+	Error   string `json:"error"`
 }
 
 func WriteJson(w http.ResponseWriter, dataBody any) error {
@@ -24,6 +25,14 @@ func WriteJson(w http.ResponseWriter, dataBody any) error {
 	}
 
 	return nil
+}
+
+func WriteSuccess(w http.ResponseWriter) {
+	resJson := &ResJson{
+		Status:  "ok",
+		Message: "success",
+	}
+	WriteJson(w, resJson)
 }
 
 func WriteError(w http.ResponseWriter, statusCode int, errMess error) error {

@@ -25,17 +25,15 @@ func (rs *Resource) Routes() chi.Router {
 	r.Post("/login", rs.LoginHandler)
 
 	r.Group(func(r chi.Router) {
-        r.Use(rs.AuthMiddleware)
+		r.Use(rs.AuthMiddleware)
 
-		// get my info by token 
-        r.Get("/info", rs.InfoHandler)
-    })
+		// get my info by token
+		r.Get("/info", rs.InfoHandler)
+	})
 
 	r.Route("/{id}", func(r chi.Router) {
 		r.Get("/", rs.DetailHandler)
 	})
-
-	
 
 	return r
 }
@@ -108,7 +106,7 @@ func (rs *Resource) DetailHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	acc, err := rs.DbInfoDetail(int(id))
+	acc, err := rs.DbInfoDetail(id)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			route.WriteError(w, http.StatusNotFound, errors.New(key.ErrNotFound))
@@ -168,7 +166,7 @@ func (rs *Resource) LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	idRefreshTkn, err := tokenResource.CreateRefreshToken(token.Token{
 		Token_id:   idTkn,
-		Account_id: int64(accAuth.Id),
+		Account_id: accAuth.Id,
 	})
 	if err != nil {
 		route.WriteError(w, http.StatusInternalServerError, err)
@@ -192,16 +190,6 @@ func (rs *Resource) LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 func (rs *Resource) InfoHandler(w http.ResponseWriter, r *http.Request) {
 	identity := r.Context().Value(key.CtxIdentity).(*Identity)
-	
-	acc, err := rs.DbInfoDetail(identity.Account_id)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			route.WriteError(w, http.StatusNotFound, errors.New(key.ErrNotFound))
-			return
-		}
-		route.WriteError(w, http.StatusInternalServerError, err)
-		return
-	}
 
-	route.WriteJson(w, acc)
+	route.WriteJson(w, identity.AccountInfo)
 }

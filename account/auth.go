@@ -18,7 +18,7 @@ type Auth struct {
 }
 
 type Identity struct {
-	Account_id int `json:"account_id"`
+	AccountInfo
 }
 
 func (rs *Resource) AuthMiddleware(next http.Handler) http.Handler {
@@ -46,34 +46,37 @@ func (rs *Resource) AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), key.CtxIdentity, &indentity)
+		ctx := context.WithValue(r.Context(), key.CtxIdentity, indentity)
 		ctx = context.WithValue(ctx, key.CtxAuthorization, authHeader)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
 
-func (rs *Resource) IdentityToken(token string) (Identity, error) {
+func (rs *Resource) IdentityToken(token string) (*Identity, error) {
 	var identity Identity
 
 	claims, err := crypto.ParseToken(token)
 	if err != nil {
-		return identity, err
+		return &identity, err
 	}
 
 	idToken, err := strconv.ParseInt(claims.Id, 10, 64)
 	if err != nil {
-		return identity, err
+		return &identity, err
 	}
 
-	idAccount, err := rs.GetAccountByToken(int(idToken))
+	idAccount, err := rs.DbGetAccountByToken(idToken)
 	if err != nil {
-		return identity, err
+		return &identity, err
 	}
 
-	identity = Identity{
-		Account_id: idAccount,
+	acc, err := rs.DbInfoDetail(idAccount)
+	if err != nil {
+		return &identity, err
 	}
 
-	return identity, nil
+	identity.AccountInfo = *acc
+
+	return &identity, nil
 }

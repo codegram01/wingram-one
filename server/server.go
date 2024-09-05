@@ -8,6 +8,7 @@ import (
 	"github.com/codegram01/wingram-one/config"
 	"github.com/codegram01/wingram-one/database"
 	"github.com/codegram01/wingram-one/middleware"
+	"github.com/codegram01/wingram-one/post"
 	"github.com/go-chi/chi/v5"
 	chiMiddleware "github.com/go-chi/chi/v5/middleware"
 )
@@ -19,6 +20,9 @@ type ServerCfg struct {
 
 func Init(scfg *ServerCfg) {
 	accountResource := &account.Resource{
+		Db: *scfg.Db,
+	}
+	postResource := &post.Resource{
 		Db: *scfg.Db,
 	}
 
@@ -35,6 +39,7 @@ func Init(scfg *ServerCfg) {
 		r.Use(middleware.JsonApi)
 
 		r.Mount("/accounts", accountResource.Routes())
+		r.Mount("/posts", postResource.Routes())
 	})
 
 	portServer := ":" + scfg.Cfg.Port

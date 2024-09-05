@@ -5,7 +5,7 @@ import (
 )
 
 type Account struct {
-	Id    int    `json:"id"`
+	Id    int64  `json:"id"`
 	Email string `json:"email"`
 }
 
@@ -20,10 +20,10 @@ type AccountReq struct {
 }
 
 type AccountInfo struct {
-	Id        int    `json:"id"`
+	Id        int64  `json:"id"`
 	Email     string `json:"email"`
 	Name      string `json:"name"`
-	ProfileId int    `json:"profile_id"`
+	ProfileId int64  `json:"profile_id"`
 }
 
 type Resource struct {

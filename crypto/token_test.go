@@ -8,7 +8,7 @@ import (
 )
 
 type DataToken struct {
-	Id   int
+	Id   int64
 	Name string
 }
 

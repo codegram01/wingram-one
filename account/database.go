@@ -48,7 +48,7 @@ func (rs *Resource) DbDetailAuth(email string) (*AccountAuth, error) {
 	return &acc, err
 }
 
-func (rs *Resource) DbInfoDetail(id int) (*AccountInfo, error) {
+func (rs *Resource) DbInfoDetail(id int64) (*AccountInfo, error) {
 	var acc AccountInfo
 
 	queryStr := `
@@ -102,8 +102,8 @@ func (rs *Resource) DbInfoList() ([]*AccountInfo, error) {
 	return accounts, err
 }
 
-func (rs *Resource) GetAccountByToken(idToken int) (int, error) {
-	var idAccount int
+func (rs *Resource) DbGetAccountByToken(idToken int64) (int64, error) {
+	var idAccount int64
 	row := rs.Db.QueryRow(`
 		SELECT account_id
 		FROM token

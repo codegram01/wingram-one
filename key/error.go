@@ -4,7 +4,9 @@ const (
 	ErrNotFound = "not found"
 	ErrPassword = "email or password not right"
 
-	ErrAuthHeaderMiss = "missing authorization header"
+	ErrAuthHeaderMiss    = "missing authorization header"
 	ErrAuthHeaderInvalid = "invalid authorization header format"
-	ErrAuthTokenInValid = "token not valid"
+	ErrAuthTokenInValid  = "token not valid"
+
+	ErrNotHavePermission = "not have permission"
 )

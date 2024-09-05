@@ -6,7 +6,7 @@ CREATE TABLE post (
     title TEXT NOT NULL,
     description TEXT,
     content TEXT,
-    profile_id INT UNIQUE NOT NULL,
+    profile_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (profile_id) REFERENCES "profile" (id) ON DELETE CASCADE
 );

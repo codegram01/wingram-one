@@ -28,3 +28,7 @@ func processRows(rows *sql.Rows, f func(*sql.Rows) error) (int, error) {
 	}
 	return n, rows.Err()
 }
+
+func (db *Db) Exec(query string, args ...any) (sql.Result, error) {
+	return db.Con.Exec(query, args...)
+}

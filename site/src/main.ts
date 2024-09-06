@@ -1,11 +1,19 @@
 import './assets/main.css'
-
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import { init_store } from './stores'
+import { init_auth } from './auth'
 
-const app = createApp(App)
+const init = async (): Promise<void> => {
+    await init_store();
 
-app.use(router)
+    await init_auth();
 
-app.mount('#app')
+    const app = createApp(App)
+
+    app.use(router)
+
+    app.mount('#app')
+}
+init();

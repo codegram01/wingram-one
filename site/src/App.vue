@@ -5,15 +5,25 @@ import NavbarLayout from '@/components/layouts/NavbarLayout.vue';
 
 <template>
   <div class="app">
-    <div class="navbar">
+    <div class="navbar-ctn">
       <NavbarLayout/>
     </div>
-    <div class="main">
+    <div class="page-ctn">
       <RouterView />
     </div>
   </div>
 </template>
 
 <style scoped>
+.app {
 
+}
+
+.navbar-ctn {
+
+}
+
+.page-ctn {
+  
+}
 </style>

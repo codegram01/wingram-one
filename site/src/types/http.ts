@@ -1,0 +1,1 @@
+export type METHOD_HTTP = "GET" | "POST" | "PUT" | "DELETE"

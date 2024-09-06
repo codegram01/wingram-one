@@ -8,5 +8,5 @@ type Token struct {
 }
 
 type Resource struct {
-	database.Db
+	*database.Db
 }

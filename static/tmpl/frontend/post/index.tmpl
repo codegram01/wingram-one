@@ -1,0 +1,12 @@
+
+
+{{define "main"}}
+  <main>
+    <h1>List Posts</h1>
+
+    {{range .Posts}}
+        <div>{{.Title}} - {{.Description}}</div> 
+    {{end}}
+  </main>
+{{end}}
+

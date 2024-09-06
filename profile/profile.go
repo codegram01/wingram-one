@@ -1,6 +1,10 @@
 package profile
 
-import "github.com/codegram01/wingram-one/database"
+import (
+	"text/template"
+
+	"github.com/codegram01/wingram-one/database"
+)
 
 type Profile struct {
 	Id        int64  `json:"id"`
@@ -14,5 +18,6 @@ type ProfileReq struct {
 }
 
 type Resource struct {
-	database.Db
+	*database.Db
+	*template.Template
 }

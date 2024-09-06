@@ -1,17 +1,25 @@
 package server
 
 import (
+	"io/fs"
 	"log"
 	"net/http"
+	"os"
 
-	"github.com/codegram01/wingram-one/account"
 	"github.com/codegram01/wingram-one/config"
 	"github.com/codegram01/wingram-one/database"
-	"github.com/codegram01/wingram-one/middleware"
-	"github.com/codegram01/wingram-one/post"
+	"github.com/codegram01/wingram-one/template"
+	"github.com/codegram01/wingram-one/template/templates"
 	"github.com/go-chi/chi/v5"
-	chiMiddleware "github.com/go-chi/chi/v5/middleware"
 )
+
+type Server struct {
+	mode string
+	template *template.Template
+	mux       *chi.Mux
+	db *database.Db
+	staticFS  fs.FS
+}
 
 type ServerCfg struct {
 	Cfg *config.Config
@@ -19,28 +27,26 @@ type ServerCfg struct {
 }
 
 func Init(scfg *ServerCfg) {
-	accountResource := &account.Resource{
-		Db: *scfg.Db,
+	ts, err := templates.ParsePageTemplates()
+	if err != nil {
+		log.Fatalf("error parsing templates: %v", err)
 	}
-	postResource := &post.Resource{
-		Db: *scfg.Db,
+
+	temp := &template.Template{
+		Templates: ts,
 	}
 
 	r := chi.NewRouter()
 
-	r.Use(chiMiddleware.Logger)
-	r.Use(middleware.CORS)
+	server := &Server{
+		mode: scfg.Cfg.Mode,
+		mux:       r,
+		template: temp,
+		db: scfg.Db,
+		staticFS:  os.DirFS("static/public"),
+	}
 
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Server Work"))
-	})
-
-	r.Route("/api/v1", func(r chi.Router) {
-		r.Use(middleware.JsonApi)
-
-		r.Mount("/accounts", accountResource.Routes())
-		r.Mount("/posts", postResource.Routes())
-	})
+	server.MakeHandler()
 
 	portServer := ":" + scfg.Cfg.Port
 	log.Printf("Server running %s\n", portServer)

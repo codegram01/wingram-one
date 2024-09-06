@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{block "description" .}}
+      <meta name="description" content="Wingram is the best">
+    {{end}}
+    <link rel="shortcut icon" href="public/favicon/favicon.ico">
+    <link rel="stylesheet" href="public/css/base.css">
+    {{block "title" .}}
+      <title>{{if .HTMLTitle}}{{.HTMLTitle}} - {{end}}Wingram</title>
+    {{end}}
+    {{block "pre-content" .}}{{end}}
+  </head>
+  <body>
+    {{template "header" .}}
+    {{template "main" .}}
+    {{template "footer" .}}
+    {{block "post-content" .}}{{end}}
+  </body>
+</html>

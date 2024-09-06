@@ -1,0 +1,12 @@
+
+
+{{define "main"}}
+  <main>
+    <h1>Accounts Page</h1>
+
+    {{range .Accounts}}
+        <div>{{.Name}} - {{.Email}}</div> 
+    {{end}}
+  </main>
+{{end}}
+

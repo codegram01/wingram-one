@@ -2,6 +2,7 @@ package account
 
 import (
 	"github.com/codegram01/wingram-one/database"
+	"github.com/codegram01/wingram-one/template"
 )
 
 type Account struct {
@@ -27,5 +28,6 @@ type AccountInfo struct {
 }
 
 type Resource struct {
-	database.Db
+	*database.Db
+	*template.Template
 }

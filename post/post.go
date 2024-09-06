@@ -1,6 +1,9 @@
 package post
 
-import "github.com/codegram01/wingram-one/database"
+import (
+	"github.com/codegram01/wingram-one/database"
+	"github.com/codegram01/wingram-one/template"
+)
 
 type Post struct {
 	Id          int64  `json:"id"`
@@ -11,5 +14,6 @@ type Post struct {
 }
 
 type Resource struct {
-	database.Db
+	*database.Db
+	*template.Template
 }

@@ -26,7 +26,7 @@ const login = async () => {
 </script>
 
 <template>
-  <main>
+  <main class="page">
     <h1>Login</h1>
 
     <form @submit.prevent="login">

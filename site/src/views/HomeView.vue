@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <main>
+  <main class="page">
     <h1>Home Work</h1>
   </main>
 </template>

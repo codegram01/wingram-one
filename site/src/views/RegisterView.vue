@@ -25,7 +25,7 @@ const register = async () => {
 </script>
 
 <template>
-  <main>
+  <main class="page">
     <h1>Register</h1>
 
     <form @submit.prevent="register">

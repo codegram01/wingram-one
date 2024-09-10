@@ -2,8 +2,10 @@ package post
 
 import (
 	"net/http"
-	"strconv"
 
+	"github.com/codegram01/wingram-one/account"
+	"github.com/codegram01/wingram-one/key"
+	"github.com/codegram01/wingram-one/route"
 	"github.com/codegram01/wingram-one/template"
 	"github.com/go-chi/chi/v5"
 )
@@ -33,7 +35,6 @@ func (rs *Resource) RoutesTemplate() chi.Router {
 func (rs *Resource) ListTemplate(w http.ResponseWriter, r *http.Request) {
 	posts, err := rs.DbList()
 	if err != nil {
-		// route.WriteError(w, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -44,16 +45,13 @@ func (rs *Resource) ListTemplate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rs *Resource) DetailTemplate(w http.ResponseWriter, r *http.Request) {
-	idS := chi.URLParam(r, "id")
-	id, err := strconv.ParseInt(idS, 10, 64)
+	id, err := route.ReadInt(r, "id")
 	if err != nil {
-		// route.WriteError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	post, err := rs.DbDetail(id)
 	if err != nil {
-		// route.WriteError(w, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -61,4 +59,26 @@ func (rs *Resource) DetailTemplate(w http.ResponseWriter, r *http.Request) {
 		BasePage: rs.Template.NewBasePage(r, "Detail Post Page"),
 		Post: post,
 	})
+}
+
+func (rs *Resource) CreateTemplate(w http.ResponseWriter, r *http.Request) {
+	identity := r.Context().Value(key.CtxIdentity).(*account.Identity)
+
+	var postReq Post
+	err := route.ReadJsonBody(w, r.Body, &postReq)
+
+	if err != nil {
+		route.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	postReq.ProfileId = identity.ProfileId
+
+	post, err := rs.DbCreate(&postReq)
+	if err != nil {
+		route.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	route.WriteJson(w, post)
 }

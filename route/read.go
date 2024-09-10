@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"strconv"
+
+	"github.com/go-chi/chi/v5"
 )
 
 func ReadJsonBody(w http.ResponseWriter, r io.Reader, data interface{}) error {
@@ -20,4 +23,9 @@ func ReadJsonBody(w http.ResponseWriter, r io.Reader, data interface{}) error {
 
 func ReadQuery(r *http.Request, key string) string {
 	return r.URL.Query().Get(key)
+}
+
+func ReadInt(r *http.Request, key string) (int64, error) {
+	idS := chi.URLParam(r, key)
+	return strconv.ParseInt(idS, 10, 64)
 }

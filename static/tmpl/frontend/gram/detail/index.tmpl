@@ -1,0 +1,12 @@
+
+{{define "main"}}
+  <main>
+    <h1>{{.Gram.Title}}</h1>
+    <h2>{{.Gram.Description}}</h2>
+    <p>{{.Gram.Content}}</p>
+
+    <hr>
+    <a href="/grams/{{.Gram.Id}}/update">Update</a>
+    <a href="/grams/{{.Gram.Id}}/delete">Delete</a>
+  </main>
+{{end}}

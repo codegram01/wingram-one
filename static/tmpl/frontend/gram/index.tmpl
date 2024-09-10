@@ -1,0 +1,16 @@
+
+
+{{define "main"}}
+  <main>
+    <h1>List Gram</h1>
+    <a href="/grams/create">Create</a>
+    <ul>
+      {{range .Grams}}
+        <li>
+          <a href="/grams/{{.Id}}">{{.Title}} - {{.Description}}</a>
+        </li>
+      {{end}}
+    </ul>
+  </main>
+{{end}}
+

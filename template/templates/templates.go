@@ -67,8 +67,15 @@ func ParsePageTemplates() (map[string]*template.Template, error) {
 		{"about"},
 		{"account"},
 		{"test"},
+
 		{"post"},
-		{"post/detail", "post/head"},
+		{"post/detail"},
+
+		{"gram"},
+		{"gram/detail"},
+		{"gram/create"},
+		{"gram/delete"},
+		{"gram/update"},
 	}
 
 	for _, set := range htmlSets {

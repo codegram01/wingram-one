@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/codegram01/wingram-one/account"
+	"github.com/codegram01/wingram-one/gram"
 	"github.com/codegram01/wingram-one/middleware"
 	"github.com/codegram01/wingram-one/post"
 	"github.com/codegram01/wingram-one/template"
@@ -23,6 +24,10 @@ func (s *Server) MakeHandler() {
 		Template: s.template,
 	}
 	postResource := &post.Resource{
+		Db: s.db,
+		Template: s.template,
+	}
+	gramResource := &gram.Resource{
 		Db: s.db,
 		Template: s.template,
 	}
@@ -43,10 +48,12 @@ func (s *Server) MakeHandler() {
 	// ssr templates handler
 	r.Route("/", func(r chi.Router) {
 		r.Get("/", s.homeHandler)
+		r.Get("/test", s.testHandler)
 		r.Get("/about", s.template.StaticPageHandler("about", "About Page"))
 
 		// r.Mount("/accounts", accountResource.Routes())
 		r.Mount("/posts", postResource.RoutesTemplate())
+		r.Mount("/grams", gramResource.RoutesTemplate())
 	})
 
 	
@@ -69,6 +76,10 @@ func (s *Server) homeHandler(w http.ResponseWriter, r *http.Request) {
 	s.template.ServePage(w, "home", template.BasePage{
 		HTMLTitle: "Home Page",
 	})
+}
+
+func (s *Server) testHandler(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "/grams", http.StatusMovedPermanently)
 }
 
 // FileServer conveniently sets up a http.FileServer handler to serve

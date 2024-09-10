@@ -50,8 +50,7 @@ func (rs *Resource) ListApi(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rs *Resource) DetailApi(w http.ResponseWriter, r *http.Request) {
-	idS := chi.URLParam(r, "id")
-	id, err := strconv.ParseInt(idS, 10, 64)
+	id, err := route.ReadInt(r, "id")
 	if err != nil {
 		route.WriteError(w, http.StatusInternalServerError, err)
 		return

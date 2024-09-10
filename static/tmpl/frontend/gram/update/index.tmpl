@@ -1,0 +1,19 @@
+{{define "main"}}
+  <main>
+    <h1>Update Gram</h1>
+
+    <form method="post">
+      <label for="title">Title:</label><br>
+      <input type="text" id="title" name="title" value="{{.Gram.Title}}"><br>
+
+      <label for="description">Description:</label><br>
+      <input type="text" id="description" name="description" value="{{.Gram.Description}}"><br>
+
+      <label for="content">Content:</label><br>
+      <input type="text" id="content" name="content" value="{{.Gram.Content}}"><br>
+
+      <br>
+      <button type="submit">Update</button>
+    </form>
+  </main>
+{{end}}
